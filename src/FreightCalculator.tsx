@@ -9,6 +9,9 @@ import {
   ShieldAlert,
   ShieldCheck,
   ArrowRight,
+  Landmark,
+  Percent,
+  CreditCard,
 } from "lucide-react";
 
 // ---------------------------------------------------------------------------
@@ -82,6 +85,36 @@ const INSPECTION = {
 type Currency = keyof typeof INSPECTION;
 
 // ---------------------------------------------------------------------------
+// PRIX DE REVIENT CÔTE D'IVOIRE — constants sourced from "Transit Douane L3"
+// course support (M. Moumouny DIANE), chapters 3 & 5.
+// ---------------------------------------------------------------------------
+
+// Droit de Douane rate by TEC tariff category (0 to 4)
+const TEC_DD_RATES = [0, 0.05, 0.10, 0.20, 0.35];
+
+const CI_RATES = {
+  rsta: 0.01, // Redevance Statistique
+  pcs: 0.008, // Prélèvement Communautaire UEMOA
+  pcc: 0.005, // Prélèvement Communautaire CEDEAO
+  pua: 0.002, // Prélèvement Union Africaine
+  tvaDouane: 0.18,
+  tvaVente: 0.18,
+  tsd: 20000, // Travail Supplémentaire Douane (XOF, fixe/déclaration)
+  rpiRate: 0.0075, // 0.75% du FOB
+  rpiMin: 100000, // minimum XOF
+  agioTresorTaux: 0.002, // 2‰ des droits & taxes, si paiement à crédit
+  primeAssMin: 5000, // plancher prime nette (XOF)
+  fraisAccessoiresAssurance: 2500, // XOF, fixe
+  majAssuranceParDefaut: 1.10, // VA = CFR x 1.10
+} as const;
+
+const MODE_MAJORATIONS: Record<string, number> = {
+  "Aérien": 0.07,
+  "Terrestre": 0.145,
+  "Maritime": 0,
+};
+
+// ---------------------------------------------------------------------------
 // HELPERS
 // ---------------------------------------------------------------------------
 
@@ -104,6 +137,17 @@ export default function FreightCalculator() {
   const [weight, setWeight] = useState<string>("600");
   const [currency, setCurrency] = useState<Currency>("USD");
   const [netValue, setNetValue] = useState<string>("");
+
+  // Prix de Revient Côte d'Ivoire
+  const [ciPrixExw, setCiPrixExw] = useState<string>("5700");
+  const [ciQuantite, setCiQuantite] = useState<string>("1");
+  const [ciFret, setCiFret] = useState<string>("500");
+  const [ciMode, setCiMode] = useState<string>("Aérien");
+  const [ciTauxChange, setCiTauxChange] = useState<string>("655.957");
+  const [ciCategorie, setCiCategorie] = useState<string>("1");
+  const [ciTauxPrime, setCiTauxPrime] = useState<string>("0.4");
+  const [ciPaiementCredit, setCiPaiementCredit] = useState<boolean>(false);
+  const [ciMarge, setCiMarge] = useState<string>("20");
 
   // Keep destination valid when departure changes
   const handleDeparture = (name: string) => {
@@ -133,6 +177,49 @@ export default function FreightCalculator() {
         ? insp.max
         : rawFee
       : null;
+
+  // ---- Prix de Revient Côte d'Ivoire ----
+  const isDestinationCI = row.country === "Côte d'Ivoire";
+
+  const ciPrixExwNum = Math.max(0, Number(ciPrixExw) || 0);
+  const ciQuantiteNum = Math.max(0, Number(ciQuantite) || 0);
+  const ciFretNum = Math.max(0, Number(ciFret) || 0);
+  const ciTauxChangeNum = Math.max(0, Number(ciTauxChange) || 655.957);
+  const ciCategorieNum = Math.min(4, Math.max(0, Number(ciCategorie) || 0));
+  const ciTauxPrimeNum = Math.max(0, Number(ciTauxPrime) || 0) / 100;
+  const ciMargeNum = Math.max(0, Number(ciMarge) || 0) / 100;
+
+  const ciFobXof = ciPrixExwNum * ciQuantiteNum * ciTauxChangeNum;
+  const ciFretXof = ciFretNum * ciTauxChangeNum;
+  const ciCfrXof = ciFobXof + ciFretXof;
+  const ciValeurAssuree = ciCfrXof * CI_RATES.majAssuranceParDefaut;
+  const ciPrimeNette = Math.max(ciValeurAssuree * ciTauxPrimeNum, CI_RATES.primeAssMin);
+  const ciMajModeTaux = MODE_MAJORATIONS[ciMode] ?? 0;
+  const ciPrimeDefinitive = (ciPrimeNette + CI_RATES.fraisAccessoiresAssurance) * (1 + ciMajModeTaux);
+  const ciValeurDouane = ciCfrXof + ciPrimeDefinitive;
+
+  const ciDdTaux = TEC_DD_RATES[ciCategorieNum] ?? 0.05;
+  const ciDroitDouane = ciValeurDouane * ciDdTaux;
+  const ciRsta = ciValeurDouane * CI_RATES.rsta;
+  const ciPcs = ciValeurDouane * CI_RATES.pcs;
+  const ciPcc = ciValeurDouane * CI_RATES.pcc;
+  const ciPua = ciValeurDouane * CI_RATES.pua;
+  const ciTsd = CI_RATES.tsd;
+  const ciRpi = Math.max(ciFobXof * CI_RATES.rpiRate, CI_RATES.rpiMin);
+  const ciTvaDouane = (ciValeurDouane + ciDroitDouane + ciRsta) * CI_RATES.tvaDouane;
+  const ciSousTotalDT = ciDroitDouane + ciRsta + ciPcs + ciPcc + ciPua + ciTsd + ciRpi + ciTvaDouane;
+  const ciAgioTresor = ciPaiementCredit ? ciSousTotalDT * CI_RATES.agioTresorTaux : 0;
+  const ciTotalDeboursDouane = ciSousTotalDT + ciAgioTresor;
+
+  const ciPrixRevientTotal = ciValeurDouane + ciTotalDeboursDouane;
+  const ciPrixRevientUnitaire = ciQuantiteNum > 0 ? ciPrixRevientTotal / ciQuantiteNum : 0;
+  const ciPrixVenteHT = ciPrixRevientTotal * (1 + ciMargeNum);
+  const ciPrixVenteTTC = ciPrixVenteHT * (1 + CI_RATES.tvaVente);
+  const ciPrixVenteUnitaireTTC = ciQuantiteNum > 0 ? ciPrixVenteTTC / ciQuantiteNum : 0;
+
+  const useCalculatedFreight = () => {
+    setCiFret(totalFreight.toFixed(2));
+  };
 
   return (
     <div
@@ -480,6 +567,232 @@ export default function FreightCalculator() {
             L'Éthiopie applique un minimum plus élevé ({INSPECTION.USD.symbol}{INSPECTION.USD.minEthiopia} /
             {" "}{INSPECTION.EUR.symbol}{INSPECTION.EUR.minEthiopia}). Les frais s'appliquent au-delà de
             2 000 $ de valeur nette — sauf pour la Tanzanie, où le seuil est de 5 000 $.
+          </p>
+        </div>
+
+        {/* ---------------- PRIX DE REVIENT CÔTE D'IVOIRE ---------------- */}
+        <div className="mt-8 rounded-2xl overflow-hidden" style={{ background: "#152634" }}>
+          <div className="px-6 pt-5 pb-4 flex items-center justify-between flex-wrap gap-3">
+            <div className="flex items-center gap-2">
+              <Landmark size={16} color="#E8A33D" />
+              <h2 className="ff-display text-sm font-semibold uppercase tracking-wide" style={{ color: "#F5F2EA" }}>
+                Prix de Revient — Importation Côte d'Ivoire
+              </h2>
+            </div>
+            {isDestinationCI && (
+              <span
+                className="ff-mono text-[10px] px-2 py-0.5 rounded-full"
+                style={{ background: "#E8A33D", color: "#152634", fontWeight: 600 }}
+              >
+                DESTINATION SÉLECTIONNÉE CI-DESSUS
+              </span>
+            )}
+          </div>
+          <p className="px-6 text-xs pb-4" style={{ color: "#8FA3B0" }}>
+            Formules sourcées du support de cours « Transit Douane, Licence 3 » (M. Moumouny DIANE) —
+            droits et taxes du Tarif Extérieur Commun UEMOA/CEDEAO.
+          </p>
+
+          <div className="px-6 pb-6 grid md:grid-cols-2 gap-6" style={{ background: "#1F374A" }}>
+            {/* Inputs */}
+            <div className="pt-6">
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <label className="block text-[11px] mb-1" style={{ color: "#8FA3B0" }}>Prix EXW/FOB (€/unité)</label>
+                  <input
+                    type="number" min={0} value={ciPrixExw}
+                    onChange={(e) => setCiPrixExw(e.target.value)}
+                    className="w-full rounded-lg py-2 px-3 text-sm font-medium outline-none ff-mono"
+                    style={{ background: "#F5F2EA", border: "1px solid #33526A", color: "#152634" }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] mb-1" style={{ color: "#8FA3B0" }}>Quantité</label>
+                  <input
+                    type="number" min={0} value={ciQuantite}
+                    onChange={(e) => setCiQuantite(e.target.value)}
+                    className="w-full rounded-lg py-2 px-3 text-sm font-medium outline-none ff-mono"
+                    style={{ background: "#F5F2EA", border: "1px solid #33526A", color: "#152634" }}
+                  />
+                </div>
+              </div>
+
+              <label className="block text-[11px] mb-1" style={{ color: "#8FA3B0" }}>Fret jusqu'à Abidjan (€)</label>
+              <div className="flex gap-2 mb-3">
+                <input
+                  type="number" min={0} value={ciFret}
+                  onChange={(e) => setCiFret(e.target.value)}
+                  className="flex-1 rounded-lg py-2 px-3 text-sm font-medium outline-none ff-mono"
+                  style={{ background: "#F5F2EA", border: "1px solid #33526A", color: "#152634" }}
+                />
+                <button
+                  onClick={useCalculatedFreight}
+                  className="px-3 rounded-lg text-[11px] font-medium whitespace-nowrap"
+                  style={{ background: "#E8A33D", color: "#152634" }}
+                  title="Reprendre le Total des frais de fret calculé plus haut"
+                >
+                  ↑ Reprendre le fret
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <label className="block text-[11px] mb-1" style={{ color: "#8FA3B0" }}>Mode de transport</label>
+                  <select
+                    value={ciMode}
+                    onChange={(e) => setCiMode(e.target.value)}
+                    className="w-full rounded-lg py-2 px-3 text-sm font-medium outline-none"
+                    style={{ background: "#F5F2EA", border: "1px solid #33526A", color: "#152634" }}
+                  >
+                    <option value="Aérien">Aérien (+7% assurance)</option>
+                    <option value="Maritime">Maritime (neutre)</option>
+                    <option value="Terrestre">Terrestre (+14,5% assurance)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[11px] mb-1" style={{ color: "#8FA3B0" }}>Catégorie TEC (0–4)</label>
+                  <select
+                    value={ciCategorie}
+                    onChange={(e) => setCiCategorie(e.target.value)}
+                    className="w-full rounded-lg py-2 px-3 text-sm font-medium outline-none"
+                    style={{ background: "#F5F2EA", border: "1px solid #33526A", color: "#152634" }}
+                  >
+                    <option value="0">Cat. 0 — DD 0%</option>
+                    <option value="1">Cat. 1 — DD 5%</option>
+                    <option value="2">Cat. 2 — DD 10%</option>
+                    <option value="3">Cat. 3 — DD 20%</option>
+                    <option value="4">Cat. 4 — DD 35%</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <label className="block text-[11px] mb-1" style={{ color: "#8FA3B0" }}>Taux de change (1€=XOF)</label>
+                  <input
+                    type="number" min={0} value={ciTauxChange}
+                    onChange={(e) => setCiTauxChange(e.target.value)}
+                    className="w-full rounded-lg py-2 px-3 text-sm font-medium outline-none ff-mono"
+                    style={{ background: "#F5F2EA", border: "1px solid #33526A", color: "#152634" }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] mb-1" style={{ color: "#8FA3B0" }}>Taux prime assurance (%)</label>
+                  <input
+                    type="number" min={0} step={0.01} value={ciTauxPrime}
+                    onChange={(e) => setCiTauxPrime(e.target.value)}
+                    className="w-full rounded-lg py-2 px-3 text-sm font-medium outline-none ff-mono"
+                    style={{ background: "#F5F2EA", border: "1px solid #33526A", color: "#152634" }}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 mb-1 items-end">
+                <div>
+                  <label className="block text-[11px] mb-1" style={{ color: "#8FA3B0" }}>Marge bénéficiaire (%)</label>
+                  <input
+                    type="number" min={0} value={ciMarge}
+                    onChange={(e) => setCiMarge(e.target.value)}
+                    className="w-full rounded-lg py-2 px-3 text-sm font-medium outline-none ff-mono"
+                    style={{ background: "#F5F2EA", border: "1px solid #33526A", color: "#152634" }}
+                  />
+                </div>
+                <button
+                  onClick={() => setCiPaiementCredit(!ciPaiementCredit)}
+                  className="flex items-center gap-2 rounded-lg py-2 px-3 text-xs font-medium"
+                  style={{
+                    background: ciPaiementCredit ? "#E8A33D" : "#F5F2EA",
+                    color: "#152634",
+                    border: "1px solid #33526A",
+                  }}
+                >
+                  <CreditCard size={13} />
+                  Crédit d'enlèvement {ciPaiementCredit ? "activé" : "désactivé"}
+                </button>
+              </div>
+              <p className="text-[10px] mt-1" style={{ color: "#8FA3B0" }}>
+                L'Agio Trésor (2‰ des droits et taxes) ne s'applique qu'en cas de paiement à crédit.
+              </p>
+            </div>
+
+            {/* Breakdown */}
+            <div className="pt-6">
+              <div className="rounded-lg p-4 mb-3" style={{ background: "#152634" }}>
+                <div className="text-[11px] uppercase tracking-wide mb-2" style={{ color: "#8FA3B0" }}>
+                  Valeur en douane (CAF)
+                </div>
+                <div className="grid grid-cols-2 gap-y-1.5 text-xs">
+                  <span style={{ color: "#8FA3B0" }}>Valeur FOB</span>
+                  <span className="ff-mono text-right text-white">{fmt(ciFobXof, 0)} XOF</span>
+                  <span style={{ color: "#8FA3B0" }}>Fret</span>
+                  <span className="ff-mono text-right text-white">{fmt(ciFretXof, 0)} XOF</span>
+                  <span style={{ color: "#8FA3B0" }}>Prime d'assurance</span>
+                  <span className="ff-mono text-right text-white">{fmt(ciPrimeDefinitive, 0)} XOF</span>
+                  <span className="font-semibold" style={{ color: "#E8A33D" }}>Valeur en Douane</span>
+                  <span className="ff-mono text-right font-semibold" style={{ color: "#E8A33D" }}>{fmt(ciValeurDouane, 0)} XOF</span>
+                </div>
+              </div>
+
+              <div className="rounded-lg p-4 mb-3" style={{ background: "#152634" }}>
+                <div className="text-[11px] uppercase tracking-wide mb-2" style={{ color: "#8FA3B0" }}>
+                  Débours douane (TEC)
+                </div>
+                <div className="grid grid-cols-2 gap-y-1 text-xs">
+                  <span style={{ color: "#8FA3B0" }}>Droit de Douane ({(ciDdTaux * 100).toFixed(0)}%)</span>
+                  <span className="ff-mono text-right text-white">{fmt(ciDroitDouane, 0)}</span>
+                  <span style={{ color: "#8FA3B0" }}>RSTA (1%)</span>
+                  <span className="ff-mono text-right text-white">{fmt(ciRsta, 0)}</span>
+                  <span style={{ color: "#8FA3B0" }}>PCS + PCC + PUA</span>
+                  <span className="ff-mono text-right text-white">{fmt(ciPcs + ciPcc + ciPua, 0)}</span>
+                  <span style={{ color: "#8FA3B0" }}>TSD (fixe)</span>
+                  <span className="ff-mono text-right text-white">{fmt(ciTsd, 0)}</span>
+                  <span style={{ color: "#8FA3B0" }}>RPI (0,75% FOB, min 100k)</span>
+                  <span className="ff-mono text-right text-white">{fmt(ciRpi, 0)}</span>
+                  <span style={{ color: "#8FA3B0" }}>TVA (18%)</span>
+                  <span className="ff-mono text-right text-white">{fmt(ciTvaDouane, 0)}</span>
+                  {ciPaiementCredit && (
+                    <>
+                      <span style={{ color: "#8FA3B0" }}>Agio Trésor (2‰)</span>
+                      <span className="ff-mono text-right text-white">{fmt(ciAgioTresor, 0)}</span>
+                    </>
+                  )}
+                  <span className="font-semibold" style={{ color: "#E8A33D" }}>Total Débours Douane</span>
+                  <span className="ff-mono text-right font-semibold" style={{ color: "#E8A33D" }}>{fmt(ciTotalDeboursDouane, 0)} XOF</span>
+                </div>
+              </div>
+
+              <div className="rounded-lg p-4" style={{ background: "#E8A33D" }}>
+                <div className="flex items-center gap-2 mb-1">
+                  <Percent size={13} color="#152634" />
+                  <span className="text-[11px] uppercase tracking-wide font-semibold" style={{ color: "#152634" }}>
+                    Prix de revient total
+                  </span>
+                </div>
+                <div className="ff-display text-2xl font-semibold" style={{ color: "#152634" }}>
+                  {fmt(ciPrixRevientTotal, 0)} XOF
+                </div>
+                <div className="text-xs" style={{ color: "#4A3A16" }}>
+                  soit {fmt(ciPrixRevientTotal / ciTauxChangeNum, 2)} € · {fmt(ciPrixRevientUnitaire, 0)} XOF / unité
+                </div>
+                <div className="h-px my-3" style={{ background: "#152634", opacity: 0.15 }} />
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium" style={{ color: "#152634" }}>
+                    Prix de vente TTC (marge {ciMarge}%)
+                  </span>
+                  <span className="ff-display text-lg font-semibold" style={{ color: "#152634" }}>
+                    {fmt(ciPrixVenteTTC, 0)} XOF
+                  </span>
+                </div>
+                <div className="text-[11px] text-right" style={{ color: "#4A3A16" }}>
+                  {fmt(ciPrixVenteUnitaireTTC, 0)} XOF / unité
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p className="text-[10px] px-6 py-3" style={{ background: "#152634", color: "#6E8299" }}>
+            Estimation à usage de devis uniquement. Le montant réel de l'honoraire du transitaire (H.A.D.)
+            et certains frais fixes locaux varient selon les prestataires — à confirmer avant facturation.
           </p>
         </div>
 
