@@ -27,46 +27,46 @@ type Row = {
 const DEPARTURES: Record<string, Row[]> = {
   Hungary: [
     { country: "Kenya", airport: "Nairobi", rate: 6.5, min: 200, inspection: "Required" },
-    { country: "Tanzania", airport: "Dar es Salaam", rate: 7, min: 250, inspection: "Required" },
-    { country: "Uganda", airport: "Entebbe", rate: 7, min: 250, inspection: "Required" },
+    { country: "Tanzanie", airport: "Dar es Salaam", rate: 7, min: 250, inspection: "Required" },
+    { country: "Ouganda", airport: "Entebbe", rate: 7, min: 250, inspection: "Required" },
     { country: "Burkina Faso", airport: "Ouagadougou", rate: 12, min: 250, inspection: "Required" },
     { country: "Congo", airport: "Kinshasa", rate: 12, min: 250, inspection: "Not Required" },
     { country: "Djibouti", airport: "Djibouti-Ambouli", rate: 18, min: 250, inspection: "Required" },
     { country: "Ghana", airport: "Accra", rate: 6.5, min: 250, inspection: "Required" },
     { country: "Nigeria", airport: "Lagos", rate: 7, min: 250, inspection: "Required" },
-    { country: "Senegal", airport: "Dakar", rate: 8.5, min: 250, inspection: "Required" },
+    { country: "Sénégal", airport: "Dakar", rate: 8.5, min: 250, inspection: "Required" },
     { country: "Côte d'Ivoire", airport: "Abidjan", rate: 8, min: 250, inspection: "Required", estimated: true },
-    { country: "Ethiopia", airport: "Addis Ababa", rate: 7.5, min: 250, inspection: "Required" },
-    { country: "Chad", airport: "Exeter", rate: 9.5, min: 250, inspection: "Required" },
-    { country: "Cameroon", airport: "Douala", rate: 9.5, min: 250, inspection: "Required" },
-    { country: "South Africa", airport: "Johannesburg", rate: 7, min: 250, inspection: "Not Required" },
+    { country: "Éthiopie", airport: "Addis Ababa", rate: 7.5, min: 250, inspection: "Required" },
+    { country: "Tchad", airport: "Exeter", rate: 9.5, min: 250, inspection: "Required" },
+    { country: "Cameroun", airport: "Douala", rate: 9.5, min: 250, inspection: "Required" },
+    { country: "Afrique du Sud", airport: "Johannesburg", rate: 7, min: 250, inspection: "Not Required" },
   ],
   Johannesburg: [
     { country: "Kenya", airport: "Nairobi", rate: 9, min: 290, inspection: "Required" },
     { country: "Malawi", airport: "Kamuzu", rate: 6, min: 290, inspection: "Not Required" },
-    { country: "Tanzania", airport: "Dar es Salaam", rate: 11, min: 290, inspection: "Required" },
-    { country: "Uganda", airport: "Entebbe", rate: 10, min: 290, inspection: "Required" },
-    { country: "Zambia", airport: "Lusaka", rate: 13, min: 290, inspection: "Not Required" },
-    { country: "Mauritius", airport: "Mauritius", rate: 7, min: 290, inspection: "Not Required" },
+    { country: "Tanzanie", airport: "Dar es Salaam", rate: 11, min: 290, inspection: "Required" },
+    { country: "Ouganda", airport: "Entebbe", rate: 10, min: 290, inspection: "Required" },
+    { country: "Zambie", airport: "Lusaka", rate: 13, min: 290, inspection: "Not Required" },
+    { country: "Maurice", airport: "Mauritius", rate: 7, min: 290, inspection: "Not Required" },
     { country: "Côte d'Ivoire", airport: "Abidjan", rate: 15, min: 290, inspection: "Required" },
     { country: "Mozambique", airport: "Maputo", rate: 11, min: 290, inspection: "Not Required" },
     { country: "Burkina Faso", airport: "Ouagadougou", rate: 8, min: 290, inspection: "Required" },
     { country: "Congo", airport: "Kinshasa", rate: 6, min: 290, inspection: "Not Required" },
     { country: "Djibouti", airport: "Djibouti-Ambouli", rate: 4, min: 290, inspection: "Required" },
-    { country: "Ethiopia", airport: "Addis Ababa", rate: 4.5, min: 290, inspection: "Required" },
+    { country: "Éthiopie", airport: "Addis Ababa", rate: 4.5, min: 290, inspection: "Required" },
     { country: "Ghana", airport: "Accra", rate: 5.5, min: 290, inspection: "Required" },
     { country: "Mali", airport: "Bamako–Sénou", rate: 8.5, min: 290, inspection: "Required" },
     { country: "Nigeria", airport: "Lagos", rate: 6, min: 290, inspection: "Required" },
     { country: "Rwanda", airport: "Kigali", rate: 6, min: 290, inspection: "Required" },
-    { country: "Senegal", airport: "Dakar", rate: 6.5, min: 290, inspection: "Required" },
+    { country: "Sénégal", airport: "Dakar", rate: 6.5, min: 290, inspection: "Required" },
     { country: "Seychelles", airport: "Seychelles", rate: 4, min: 290, inspection: "Not Required" },
     { country: "Sierra Leone", airport: "Lungi", rate: 8, min: 290, inspection: "Not Required" },
-    { country: "South Sudan", airport: "Malakal", rate: 6.5, min: 290, inspection: "Required" },
+    { country: "Soudan du Sud", airport: "Malakal", rate: 6.5, min: 290, inspection: "Required" },
     { country: "Togo", airport: "Gnassingbé Eyadéma", rate: 6.5, min: 290, inspection: "Required" },
     { country: "Zimbabwe", airport: "Harare", rate: 4, min: 290, inspection: "Not Required" },
-    { country: "Gambia", airport: "Banjul", rate: 7.5, min: 290, inspection: "Not Required" },
-    { country: "Cameroon", airport: "Douala", rate: 7, min: 290, inspection: "Required" },
-    { country: "Chad", airport: "Exeter", rate: 9, min: 290, inspection: "Required" },
+    { country: "Gambie", airport: "Banjul", rate: 7.5, min: 290, inspection: "Not Required" },
+    { country: "Cameroun", airport: "Douala", rate: 7, min: 290, inspection: "Required" },
+    { country: "Tchad", airport: "Exeter", rate: 9, min: 290, inspection: "Required" },
     { country: "Niger", airport: "Diori Hamani", rate: 9, min: 290, inspection: "Required" },
   ],
 };
@@ -86,7 +86,10 @@ type Currency = keyof typeof INSPECTION;
 // ---------------------------------------------------------------------------
 
 const fmt = (n: number, digits = 2) =>
-  n.toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits });
+  n.toLocaleString("fr-FR", { minimumFractionDigits: digits, maximumFractionDigits: digits });
+
+const inspectionLabel = (v: "Required" | "Not Required") =>
+  v === "Required" ? "Requise" : "Non requise";
 
 // ---------------------------------------------------------------------------
 // COMPONENT
@@ -119,7 +122,7 @@ export default function FreightCalculator() {
   const minApplied = byWeight < row.min;
 
   const insp = INSPECTION[currency];
-  const minCharge = row.country === "Ethiopia" ? insp.minEthiopia : insp.min;
+  const minCharge = row.country === "Éthiopie" ? insp.minEthiopia : insp.min;
   const netValueNum = Math.max(0, Number(netValue) || 0);
   const rawFee = netValueNum * 0.01;
   const inspectionFee =
@@ -154,7 +157,7 @@ export default function FreightCalculator() {
         input[type=number]::-webkit-inner-spin-button { opacity: 1; }
       `}</style>
 
-      <div className="max-w-5xl mx-auto px-6 py-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         {/* ---------------- HEADER ---------------- */}
         <div className="flex items-center gap-3 mb-2">
           <div
@@ -167,16 +170,16 @@ export default function FreightCalculator() {
             className="ff-mono text-xs tracking-[0.25em] uppercase"
             style={{ color: "#6E7C87" }}
           >
-            Grundfos · Air Export Network
+            Grundfos · Réseau d'export aérien
           </span>
         </div>
         <h1 className="ff-display text-4xl sm:text-5xl font-semibold leading-tight mb-2">
-          Freight &amp; Inspection Calculator
+          Calculateur de fret &amp; d'inspection
         </h1>
         <p className="text-base max-w-xl" style={{ color: "#5B6A75" }}>
-          Select a departure hub and destination, enter the gross weight, and
-          get an instant quoting estimate — plus the destination's inspection
-          fee.
+          Choisissez un dépôt de départ et une destination, saisissez le poids
+          brut, et obtenez instantanément une estimation de devis — plus les
+          frais d'inspection de la destination.
         </p>
 
         {/* ---------------- MAIN GRID ---------------- */}
@@ -189,13 +192,13 @@ export default function FreightCalculator() {
             <div className="flex items-center gap-2 mb-4">
               <Package size={16} color="#3D5A73" />
               <h2 className="ff-display text-sm font-semibold uppercase tracking-wide" style={{ color: "#3D5A73" }}>
-                Shipment Details
+                Détails de l'expédition
               </h2>
             </div>
 
             {/* Departure toggle */}
             <label className="block text-xs font-medium mb-2" style={{ color: "#6E7C87" }}>
-              Departure
+              Départ
             </label>
             <div className="grid grid-cols-2 gap-2 mb-5">
               {departureNames.map((name) => {
@@ -219,7 +222,7 @@ export default function FreightCalculator() {
 
             {/* Destination select */}
             <label className="block text-xs font-medium mb-2" style={{ color: "#6E7C87" }}>
-              Country of Destination
+              Pays de destination
             </label>
             <div className="relative mb-5">
               <select
@@ -230,7 +233,7 @@ export default function FreightCalculator() {
               >
                 {rows.map((r) => (
                   <option key={r.country} value={r.country}>
-                    {r.country} — {r.airport}{r.estimated ? " (estimated)" : ""}
+                    {r.country} — {r.airport}{r.estimated ? " (estimé)" : ""}
                   </option>
                 ))}
               </select>
@@ -244,15 +247,15 @@ export default function FreightCalculator() {
               >
                 <Info size={13} style={{ marginTop: 1, flexShrink: 0 }} />
                 <span>
-                  Rate estimated by interpolation from comparable West-African routes (Senegal, Ghana) —
-                  not present in the original source file. Confirm with the forwarder before quoting.
+                  Tarif estimé par interpolation à partir de routes ouest-africaines comparables (Sénégal,
+                  Ghana) — absent du fichier source d'origine. À confirmer avec le transitaire avant devis.
                 </span>
               </div>
             )}
 
             {/* INCO term (fixed) */}
             <label className="block text-xs font-medium mb-2" style={{ color: "#6E7C87" }}>
-              INCO Term
+              Incoterm
             </label>
             <div
               className="w-full rounded-lg py-2.5 px-3 text-sm mb-5"
@@ -263,19 +266,20 @@ export default function FreightCalculator() {
 
             {/* Weight */}
             <label className="block text-xs font-medium mb-2" style={{ color: "#6E7C87" }}>
-              Gross Weight (Kg)
+              Poids brut (kg)
             </label>
             <input
               type="number"
               min={0}
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
-              placeholder="e.g. 600"
+              placeholder="ex. 600"
               className="w-full rounded-lg py-2.5 px-3 text-sm font-medium outline-none mb-1 ff-mono"
               style={{ background: "#F5F2EA", border: "1px solid #E4DFD1", color: "#152634" }}
             />
             <p className="text-xs" style={{ color: "#8B978F" }}>
-              If gross weight is inaccurate due to large dimensions, volumetric weight will be used instead.
+              Si le poids brut est inexact en raison de dimensions importantes, le poids volumétrique sera
+              utilisé à la place.
             </p>
           </div>
 
@@ -288,7 +292,7 @@ export default function FreightCalculator() {
               {/* top strip */}
               <div className="flex items-center justify-between px-6 pt-5">
                 <span className="ff-mono text-[11px] tracking-[0.2em] uppercase" style={{ color: "#8FA3B0" }}>
-                  Air Waybill Estimate
+                  Estimation de lettre de transport aérien
                 </span>
                 <span
                   className="ff-mono text-[11px] px-2 py-0.5 rounded-full"
@@ -299,19 +303,20 @@ export default function FreightCalculator() {
               </div>
 
               {/* route line */}
-              <div className="flex items-center gap-3 px-6 pt-6 pb-5">
-                <div className="flex-1">
-                  <div className="ff-display text-2xl font-semibold">{departure}</div>
-                  <div className="ff-mono text-[11px]" style={{ color: "#8FA3B0" }}>ORIGIN</div>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 px-5 sm:px-6 pt-6 pb-5">
+                <div className="flex-1 flex sm:block items-center justify-between">
+                  <div className="ff-display text-lg sm:text-2xl font-semibold break-words">{departure}</div>
+                  <div className="ff-mono text-[11px]" style={{ color: "#8FA3B0" }}>ORIGINE</div>
                 </div>
-                <div className="flex-1 flex items-center gap-2 px-2">
-                  <div className="flex-1 h-px" style={{ background: "#3D5A73" }} />
-                  <Plane size={16} color="#E8A33D" />
+                <div className="flex items-center gap-2 sm:px-2 sm:flex-1">
+                  <div className="flex-1 h-px sm:hidden" style={{ background: "#3D5A73" }} />
+                  <div className="hidden sm:block flex-1 h-px" style={{ background: "#3D5A73" }} />
+                  <Plane size={16} color="#E8A33D" className="rotate-90 sm:rotate-0 shrink-0" />
                   <div className="flex-1 h-px" style={{ background: "#3D5A73" }} />
                 </div>
-                <div className="flex-1 text-right">
-                  <div className="ff-display text-2xl font-semibold">{row.airport}</div>
-                  <div className="ff-mono text-[11px]" style={{ color: "#8FA3B0" }}>{row.country.toUpperCase()}</div>
+                <div className="flex-1 flex sm:block items-center justify-between sm:text-right">
+                  <div className="ff-display text-lg sm:text-2xl font-semibold break-words sm:text-right">{row.airport}</div>
+                  <div className="ff-mono text-[11px] sm:text-right" style={{ color: "#8FA3B0" }}>{row.country.toUpperCase()}</div>
                 </div>
               </div>
               {row.estimated && (
@@ -320,7 +325,7 @@ export default function FreightCalculator() {
                     className="ff-mono text-[10px] px-2 py-0.5 rounded-full"
                     style={{ background: "#3D5A73", color: "#F5F2EA" }}
                   >
-                    ESTIMATED RATE — CONFIRM BEFORE QUOTING
+                    TARIF ESTIMÉ — À CONFIRMER AVANT DEVIS
                   </span>
                 </div>
               )}
@@ -331,27 +336,27 @@ export default function FreightCalculator() {
               {/* breakdown */}
               <div className="px-6 py-6" style={{ background: "#1F374A" }}>
                 <div className="grid grid-cols-2 gap-y-3 text-sm mb-5">
-                  <span style={{ color: "#8FA3B0" }}>Gross Weight</span>
+                  <span style={{ color: "#8FA3B0" }}>Poids brut</span>
                   <span className="ff-mono text-right">{fmt(weightNum, 0)} kg</span>
 
-                  <span style={{ color: "#8FA3B0" }}>Rate</span>
+                  <span style={{ color: "#8FA3B0" }}>Tarif</span>
                   <span className="ff-mono text-right">€{fmt(row.rate)} / kg</span>
 
-                  <span style={{ color: "#8FA3B0" }}>Air Freight Min</span>
+                  <span style={{ color: "#8FA3B0" }}>Minimum de fret</span>
                   <span className="ff-mono text-right">€{fmt(row.min, 0)}</span>
 
-                  <span style={{ color: "#8FA3B0" }}>Weight × Rate</span>
+                  <span style={{ color: "#8FA3B0" }}>Poids × Tarif</span>
                   <span className="ff-mono text-right">€{fmt(byWeight)}</span>
                 </div>
 
                 <div className="flex items-center justify-between pt-4" style={{ borderTop: "1px solid #33526A" }}>
                   <div>
                     <div className="text-xs uppercase tracking-wide" style={{ color: "#8FA3B0" }}>
-                      Total Freight Charges
+                      Total des frais de fret
                     </div>
                     {minApplied && (
                       <div className="text-[11px] mt-0.5" style={{ color: "#E8A33D" }}>
-                        Minimum charge applied
+                        Minimum de fret appliqué
                       </div>
                     )}
                   </div>
@@ -367,13 +372,13 @@ export default function FreightCalculator() {
                   <ShieldCheck size={15} color="#6FB58A" />
                 )}
                 <span className="text-xs" style={{ color: "#8FA3B0" }}>
-                  Inspection fees for {row.country}:
+                  Frais d'inspection pour {row.country} :
                 </span>
                 <span
                   className="ff-mono text-xs font-semibold"
                   style={{ color: row.inspection === "Required" ? "#E27D5C" : "#6FB58A" }}
                 >
-                  {row.inspection}
+                  {inspectionLabel(row.inspection)}
                 </span>
               </div>
             </div>
@@ -386,7 +391,7 @@ export default function FreightCalculator() {
             <div className="flex items-center gap-2">
               <ArrowRight size={16} color="#3D5A73" />
               <h2 className="ff-display text-sm font-semibold uppercase tracking-wide" style={{ color: "#3D5A73" }}>
-                Inspection Fees Calculator
+                Calculateur de frais d'inspection
               </h2>
             </div>
             <div className="flex rounded-lg overflow-hidden" style={{ border: "1px solid #E4DFD1" }}>
@@ -409,21 +414,21 @@ export default function FreightCalculator() {
           <div className="grid sm:grid-cols-3 gap-5">
             <div>
               <label className="block text-xs font-medium mb-2" style={{ color: "#6E7C87" }}>
-                Total Net Value ({currency})
+                Valeur nette totale ({currency})
               </label>
               <input
                 type="number"
                 min={0}
                 value={netValue}
                 onChange={(e) => setNetValue(e.target.value)}
-                placeholder="Quote value excl. freight"
+                placeholder="Valeur du devis hors fret"
                 className="w-full rounded-lg py-2.5 px-3 text-sm font-medium outline-none ff-mono"
                 style={{ background: "#F5F2EA", border: "1px solid #E4DFD1", color: "#152634" }}
               />
             </div>
 
             <div>
-              <div className="text-xs font-medium mb-2" style={{ color: "#6E7C87" }}>Reference Range</div>
+              <div className="text-xs font-medium mb-2" style={{ color: "#6E7C87" }}>Plage de référence</div>
               <div
                 className="rounded-lg py-2.5 px-3 text-sm ff-mono"
                 style={{ background: "#F5F2EA", border: "1px solid #E4DFD1", color: "#5B6A75" }}
@@ -433,7 +438,7 @@ export default function FreightCalculator() {
             </div>
 
             <div>
-              <div className="text-xs font-medium mb-2" style={{ color: "#6E7C87" }}>Requirement</div>
+              <div className="text-xs font-medium mb-2" style={{ color: "#6E7C87" }}>Exigence</div>
               <div
                 className="rounded-lg py-2.5 px-3 text-sm flex items-center gap-2"
                 style={{ background: "#F5F2EA", border: "1px solid #E4DFD1" }}
@@ -447,7 +452,7 @@ export default function FreightCalculator() {
                   className="text-sm font-medium"
                   style={{ color: row.inspection === "Required" ? "#C4573F" : "#3F7052" }}
                 >
-                  {row.inspection}
+                  {inspectionLabel(row.inspection)}
                 </span>
               </div>
             </div>
@@ -460,21 +465,21 @@ export default function FreightCalculator() {
             <div className="flex items-center gap-2">
               <CheckCircle2 size={16} color="#3F7052" />
               <span className="text-sm font-medium" style={{ color: "#152634" }}>
-                Inspection Fee
+                Frais d'inspection
               </span>
             </div>
             <div className="ff-display text-3xl font-semibold" style={{ color: "#152634" }}>
               {row.inspection === "Required"
                 ? `${insp.symbol}${fmt(inspectionFee ?? minCharge, 0)}`
-                : "Not Required"}
+                : "Non requis"}
             </div>
           </div>
 
           <p className="text-xs mt-4" style={{ color: "#8B978F" }}>
-            Fee = 1% of Total Net Value, clamped between the min and max charge above. Ethiopia uses a
-            higher minimum ({INSPECTION.USD.symbol}{INSPECTION.USD.minEthiopia} / {INSPECTION.EUR.symbol}
-            {INSPECTION.EUR.minEthiopia}). Fees apply once net value exceeds $2,000 — except Tanzania, where
-            the threshold is $5,000.
+            Frais = 1 % de la valeur nette totale, plafonnés entre le minimum et le maximum ci-dessus.
+            L'Éthiopie applique un minimum plus élevé ({INSPECTION.USD.symbol}{INSPECTION.USD.minEthiopia} /
+            {" "}{INSPECTION.EUR.symbol}{INSPECTION.EUR.minEthiopia}). Les frais s'appliquent au-delà de
+            2 000 $ de valeur nette — sauf pour la Tanzanie, où le seuil est de 5 000 $.
           </p>
         </div>
 
@@ -487,13 +492,13 @@ export default function FreightCalculator() {
             </h3>
           </div>
           <ul className="text-xs space-y-1.5" style={{ color: "#7C8891" }}>
-            <li>Above rate is only an estimate to be used for quoting purposes only.</li>
-            <li>Calculation is subject to rate of exchange and will be updated should extreme changes in ROE occur.</li>
-            <li>Rates exclude any additional costs required for extra length or height restrictions by the airline, above the norm.</li>
-            <li>Additional costs may apply in case of space availability on cargo planes where goods are bumped onto other flights, causing delays.</li>
-            <li>If the gross weight is inaccurate due to large dimensions, the volume of the goods will be used instead.</li>
-            <li>Actual airfreight costs will be invoiced once made available by the forwarder against a packing list.</li>
-            <li>Grundfos cannot be held liable for any unforeseen costs additional to the calculated rates.</li>
+            <li>Le tarif ci-dessus n'est qu'une estimation, à usage de devis uniquement.</li>
+            <li>Le calcul est soumis au taux de change et sera mis à jour en cas de variation extrême de celui-ci.</li>
+            <li>Les tarifs excluent tout coût supplémentaire requis pour un excès de longueur ou de hauteur par la compagnie aérienne, au-delà de la norme.</li>
+            <li>Des coûts additionnels peuvent s'appliquer en cas de disponibilité limitée sur les avions cargo, lorsque les marchandises sont reportées sur d'autres vols, entraînant des retards.</li>
+            <li>Si le poids brut est inexact en raison de dimensions importantes, le volume des marchandises sera utilisé à la place.</li>
+            <li>Les frais de transport aérien réels seront facturés une fois communiqués par le transitaire, sur présentation d'une liste de colisage.</li>
+            <li>Grundfos ne peut être tenu responsable des coûts imprévus s'ajoutant aux tarifs calculés.</li>
           </ul>
         </div>
       </div>
